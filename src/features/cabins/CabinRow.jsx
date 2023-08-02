@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCabin } from "../../services/apiCabins";
+import { createEditCabin, deleteCabin } from "../../services/apiCabins";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
+import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 
 const TableRow = styled.div`
     display: grid;
@@ -55,6 +56,7 @@ function CabinRow({ cabin }) {
         regularPrice,
         discount,
         image,
+        description,
     } = cabin;
 
     const queryClient = useQueryClient();
@@ -71,6 +73,16 @@ function CabinRow({ cabin }) {
         onError: (err) => toast.error(err.message),
     });
 
+    const { mutate: createCabin, isLoading: isCreating } = useMutation({
+        mutationFn: createEditCabin,
+        onSuccess: () => {
+            toast.success("New cabin successfully created");
+
+            queryClient.invalidateQueries({ queryKey: ["cabins"] });
+        },
+        onError: (err) => toast.error(err.message),
+    });
+
     return (
         <>
             <TableRow role="row">
@@ -78,16 +90,36 @@ function CabinRow({ cabin }) {
                 <Cabin>{name}</Cabin>
                 <div>Fits up to {maxCapacity}</div>
                 <Price>{formatCurrency(regularPrice)}</Price>
-                <Discount>{formatCurrency(discount)}</Discount>
+                {discount ? (
+                    <Discount>{formatCurrency(discount)}</Discount>
+                ) : (
+                    <span>&mdash;</span>
+                )}
                 <div>
+                    <button
+                        disabled={isCreating}
+                        //Tạo 1 bản sao của cabin , không chuyển id vào {} vì id là duy nhất
+                        onClick={() =>
+                            createCabin({
+                                name: `Copy of ${name}`,
+                                maxCapacity,
+                                regularPrice,
+                                discount,
+                                image,
+                                description,
+                            })
+                        }
+                    >
+                        <HiSquare2Stack />
+                    </button>
                     <button onClick={() => setShowForm((show) => !show)}>
-                        Edit
+                        <HiPencil />
                     </button>
                     <button
                         onClick={() => mutate(cabinId)}
                         disabled={isDeleting}
                     >
-                        Delete
+                        <HiTrash />
                     </button>
                 </div>
             </TableRow>

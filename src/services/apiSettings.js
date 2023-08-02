@@ -24,4 +24,7 @@ export async function updateSetting(newSetting) {
     throw new Error("Settings could not be updated");
   }
   return data;
+
+
 }
+

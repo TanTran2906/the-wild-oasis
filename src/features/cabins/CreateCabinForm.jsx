@@ -68,7 +68,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         onError: (err) => toast.error(err.message),
     });
 
-    //mutate : editCabin
+    //mutate : editCabin/updateCabin
     const { mutate: editCabin, isLoading: isEditing } = useMutation({
         mutationFn: ({ newCabinData, id }) => createEditCabin(newCabinData, id),
         onSuccess: () => {
