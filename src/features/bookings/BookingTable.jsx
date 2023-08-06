@@ -5,15 +5,37 @@ import Empty from "../../ui/Empty";
 import { useQuery } from "@tanstack/react-query";
 import { getBookings } from "../../services/apiBookings";
 import Spinner from "../../ui/Spinner";
+import { useSearchParams } from "react-router-dom";
+import Pagination from "../../ui/Pagination";
 
 function BookingTable() {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    //FILTER
+    const filterValue = searchParams.get("status");
+    const filter =
+        !filterValue || filterValue === "all"
+            ? null
+            : { field: "status", value: filterValue };
+    // :  { field: "totalPrice", value: 5000, method: "gte" };
+
+    //SORT
+    const sortByRaw = searchParams.get("sortBy") || "startDate-desc";
+    const [field, direction] = sortByRaw.split("-");
+    const sortBy = { field, direction };
+
+    //PAGINATION
+    const page = !searchParams.get("page")
+        ? 1
+        : Number(searchParams.get("page"));
+
     const {
         isLoading,
-        data: bookings,
+        data: { data: bookings, count } = {},
         error,
     } = useQuery({
-        queryKey: ["bookings"],
-        queryFn: getBookings,
+        queryKey: ["bookings", filter, sortBy, page],
+        queryFn: () => getBookings({ filter, sortBy, page }),
     });
 
     if (isLoading) return <Spinner />;
@@ -44,6 +66,10 @@ function BookingTable() {
                         <BookingRow key={booking.id} booking={booking} />
                     )}
                 /> */}
+
+                <Table.Footer>
+                    <Pagination count={count} />
+                </Table.Footer>
             </Table>
         </Menus>
     );
