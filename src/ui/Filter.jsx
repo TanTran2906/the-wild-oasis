@@ -41,7 +41,7 @@ function Filter({ filterField, options }) {
 
     function handleClick(value) {
         searchParams.set(filterField, value);
-        searchParams.set("page", 1);
+        searchParams.set("page", 1); ////Đặt lại page=1 giữa các lần chuyển đổi của filter
         // Cập nhật tham số tìm kiếm sau khi thay đổi
         setSearchParams(searchParams);
     }

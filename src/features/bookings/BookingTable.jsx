@@ -2,13 +2,15 @@ import BookingRow from "./BookingRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import Empty from "../../ui/Empty";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getBookings } from "../../services/apiBookings";
 import Spinner from "../../ui/Spinner";
 import { useSearchParams } from "react-router-dom";
 import Pagination from "../../ui/Pagination";
+import { PAGE_SIZE } from "../../utils/constans";
 
 function BookingTable() {
+    const queryClient = useQueryClient();
     const [searchParams, setSearchParams] = useSearchParams();
 
     //FILTER
@@ -37,6 +39,25 @@ function BookingTable() {
         queryKey: ["bookings", filter, sortBy, page],
         queryFn: () => getBookings({ filter, sortBy, page }),
     });
+
+    //PRE_FETCHING
+    const pageCount = Math.ceil(count / PAGE_SIZE);
+
+    //Nếu chưa phải trang cuối thì tìm nạp trước 1 trang (next page)
+    if (page < pageCount) {
+        queryClient.prefetchQuery({
+            queryKey: ["bookings", filter, sortBy, page + 1],
+            queryFn: () => getBookings({ filter, sortBy, page: page + 1 }),
+        });
+    }
+
+    //Nếu chưa phải trang đầu thì tìm nạp trước 1 trang (previous page)
+    if (page > 1) {
+        queryClient.prefetchQuery({
+            queryKey: ["bookings", filter, sortBy, page - 1],
+            queryFn: () => getBookings({ filter, sortBy, page: page - 1 }),
+        });
+    }
 
     if (isLoading) return <Spinner />;
     if (!bookings.length) return <Empty resourceName="bookings" />;
