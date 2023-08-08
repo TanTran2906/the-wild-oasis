@@ -13,6 +13,7 @@ import { useMoveBack } from "../../hooks/useMoveBack";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getBooking } from "../../services/apiBookings";
+import useCheckout from "../check-in-out/useCheckout";
 
 const HeadingGroup = styled.div`
     display: flex;
@@ -23,6 +24,7 @@ const HeadingGroup = styled.div`
 function BookingDetail() {
     // const status = "checked-in";
     const navigate = useNavigate();
+    const { checkout, isCheckingOut } = useCheckout();
 
     const moveBack = useMoveBack();
 
@@ -45,7 +47,7 @@ function BookingDetail() {
 
     const { status, id } = booking;
 
-    if (isLoading) return <Spinner />;
+    if (isLoading || isCheckingOut) return <Spinner />;
 
     return (
         <>
@@ -62,11 +64,20 @@ function BookingDetail() {
             <BookingDataBox booking={booking} />
 
             <ButtonGroup>
+                <Button onClick={() => checkout(bookingId)}>Delete</Button>
+
                 {status === "unconfirmed" && (
                     <Button onClick={() => navigate(`/checkin/${bookingId}`)}>
                         Check in
                     </Button>
                 )}
+
+                {status === "checked-in" && (
+                    <Button onClick={() => checkout(bookingId)}>
+                        Check out
+                    </Button>
+                )}
+
                 <Button variation="secondary" onClick={moveBack}>
                     Back
                 </Button>
