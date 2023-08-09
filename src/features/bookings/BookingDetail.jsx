@@ -14,6 +14,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getBooking } from "../../services/apiBookings";
 import useCheckout from "../check-in-out/useCheckout";
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import useDeleteBooking from "./useDeleteBooking";
 
 const HeadingGroup = styled.div`
     display: flex;
@@ -25,6 +28,7 @@ function BookingDetail() {
     // const status = "checked-in";
     const navigate = useNavigate();
     const { checkout, isCheckingOut } = useCheckout();
+    const { isDeleting, deleteBookingMutate } = useDeleteBooking();
 
     const moveBack = useMoveBack();
 
@@ -64,8 +68,6 @@ function BookingDetail() {
             <BookingDataBox booking={booking} />
 
             <ButtonGroup>
-                <Button onClick={() => checkout(bookingId)}>Delete</Button>
-
                 {status === "unconfirmed" && (
                     <Button onClick={() => navigate(`/checkin/${bookingId}`)}>
                         Check in
@@ -77,6 +79,24 @@ function BookingDetail() {
                         Check out
                     </Button>
                 )}
+
+                <Modal>
+                    <Modal.Open opens="delete">
+                        <Button variation="danger">Delete booking</Button>
+                    </Modal.Open>
+
+                    <Modal.Window name="delete">
+                        <ConfirmDelete
+                            resourceName="booking"
+                            onConfirm={() =>
+                                deleteBookingMutate(bookingId, {
+                                    onSettled: () => navigate(-1),
+                                })
+                            }
+                            disabled={isDeleting}
+                        />
+                    </Modal.Window>
+                </Modal>
 
                 <Button variation="secondary" onClick={moveBack}>
                     Back
