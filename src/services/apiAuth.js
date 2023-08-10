@@ -12,3 +12,21 @@ export async function login({ email, password }) {
     return data
 
 }
+
+export async function getCurrentUser() {
+    const { data: session } = await supabase.auth.getSession() //Lấy dữ liệu phiên hiện tại
+    if (!session.session) return null
+
+    const { data, error } = await supabase.auth.getUser() // Nếu người dùng có phiên hợp lệ thì lấy dữ liệu người dùng
+
+    console.log(data)
+
+    if (error) throw new Error(error.message)
+
+    return data?.user
+}
+
+export async function logout() {
+    const { error } = await supabase.auth.signOut()
+    if (error) throw new Error(error.message)
+}
