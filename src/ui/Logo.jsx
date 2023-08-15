@@ -6,14 +6,14 @@ const StyledLogo = styled.div`
 `;
 
 const Img = styled.img`
-    height: 9.6rem;
+    height: 9.2rem;
     width: auto;
 `;
 
 function Logo() {
     const { isDarkMode } = useDarkMode();
     //logo-light.png: Nằm ở folder public
-    const src = isDarkMode ? "/logo-dark.png" : "/logo-light.png";
+    const src = isDarkMode ? "/logo-dark.png" : "/logo_light.png";
 
     return (
         <StyledLogo>

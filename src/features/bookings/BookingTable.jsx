@@ -11,7 +11,7 @@ import { PAGE_SIZE } from "../../utils/constans";
 
 function BookingTable() {
     const queryClient = useQueryClient();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
     //FILTER
     const filterValue = searchParams.get("status");
@@ -34,7 +34,7 @@ function BookingTable() {
     const {
         isLoading,
         data: { data: bookings, count } = {},
-        error,
+        // error,
     } = useQuery({
         queryKey: ["bookings", filter, sortBy, page],
         queryFn: () => getBookings({ filter, sortBy, page }),

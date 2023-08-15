@@ -120,6 +120,7 @@ function CabinRow({ cabin }) {
                         <Menus.List id={cabinId}>
                             <Menus.Button
                                 icon={<HiSquare2Stack />}
+                                disabled={isCreating}
                                 onClick={() =>
                                     createCabin({
                                         name: `Copy of ${name}`,

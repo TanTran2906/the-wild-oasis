@@ -10,7 +10,7 @@ function UpdateSettingsForm() {
     const {
         isLoading,
         data: settings = {},
-        error,
+        // error,
     } = useQuery({
         queryKey: ["settings"],
         queryFn: getSettings,

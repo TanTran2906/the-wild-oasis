@@ -9,15 +9,15 @@ import ButtonText from "../../ui/ButtonText";
 import Checkbox from "../../ui/Checkbox";
 
 import { useMoveBack } from "../../hooks/useMoveBack";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {useQuery } from "@tanstack/react-query";
 import { getBooking } from "../../services/apiBookings";
 import Spinner from "../../ui/Spinner";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { formatCurrency } from "../../utils/helpers";
 import useCheckin from "./useCheckin";
-import { toast } from "react-hot-toast";
-import { getSettings, updateSetting } from "../../services/apiSettings";
+// import { toast } from "react-hot-toast";
+import { getSettings } from "../../services/apiSettings";
 import { useEffect } from "react";
 
 const Box = styled.div`
@@ -38,7 +38,7 @@ function CheckinBooking() {
     const {
         isLoading,
         data: booking = {},
-        error,
+        // error,
     } = useQuery({
         queryKey: ["booking", bookingId],
         queryFn: () => getBooking(bookingId),
@@ -51,7 +51,7 @@ function CheckinBooking() {
     const {
         isLoading: isLoadingSettings,
         data: settings = {},
-        error: errorSettings,
+        // error: errorSettings,
     } = useQuery({
         queryKey: ["settings"],
         queryFn: getSettings,
