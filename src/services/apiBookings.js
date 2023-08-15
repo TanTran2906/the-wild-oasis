@@ -91,7 +91,7 @@ export async function getStaysTodayActivity() {
     )
     .order("created_at");
 
-  // Equivalent to this. But by querying this, we only download the data we actually need, otherwise we would need ALL bookings ever created
+  //Dòng .or() Tương đương với cái này. Nhưng bằng cách truy vấn điều này, chúng tôi chỉ tải xuống dữ liệu mà chúng tôi thực sự cần, nếu không, chúng tôi sẽ cần TẤT CẢ các đặt phòng đã từng được tạo
   // (stay.status === 'unconfirmed' && isToday(new Date(stay.startDate))) ||
   // (stay.status === 'checked-in' && isToday(new Date(stay.endDate)))
 

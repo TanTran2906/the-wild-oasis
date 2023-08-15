@@ -195,7 +195,7 @@ function DurationChart({ confirmedStays }) {
     const data = prepareData(starData, confirmedStays);
     return (
         <ChartBox>
-            <Heading as="h2">Tổng kết thời gian lưu trú</Heading>
+            <Heading as="h2">Stay duration summary</Heading>
 
             {/* Container linh hoạt để làm cho biểu đồ đáp ứng */}
             <ResponsiveContainer width="100%" height={240}>

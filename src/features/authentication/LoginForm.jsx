@@ -9,8 +9,8 @@ import { login } from "../../services/apiAuth";
 import { useLogin } from "./useLogin";
 
 function LoginForm() {
-    const [email, setEmail] = useState("fair.narwhal3959@maildrop.cc");
-    const [password, setPassword] = useState("123456789");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const { login, isLoading } = useLogin();
 
     function handleSubmit(e) {

@@ -99,6 +99,7 @@ function Toggle({ id }) {
     }, [close, id]);
 
     function handleClick(e) {
+        e.stopPropagation(); //Ngăn nổi bọt
         const rect = e.target.closest("button").getBoundingClientRect();
 
         setPosition({
@@ -129,10 +130,10 @@ function List({ id, children }) {
                 }
             }
 
-            document.addEventListener("click", handleClick, true);
+            document.addEventListener("click", handleClick, false);
 
             return () =>
-                document.removeEventListener("click", handleClick, true);
+                document.removeEventListener("click", handleClick, false);
         },
         [close]
     );
